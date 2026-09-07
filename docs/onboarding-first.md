@@ -20,6 +20,7 @@ Before starting, work through [install-colab-cli.md](install-colab-cli.md), whic
 - Be able to run end-to-end multi-stage retrieval pipelines with RankZephyr and FirstMistral.
 
 In this guide, we will focus on the listwise approach.
+Throughout the process, you will reproduce the SPLADE++ EnsembleDistil → FirstMistral results from Table 3 of [this paper](https://arxiv.org/pdf/2411.05508), on both TREC DL19 and DL20.
 For more information about pointwise and pairwise, one can refer to [Zhuang et al. (2024)](https://arxiv.org/abs/2310.14122) and [Qin et al. (2024)](https://arxiv.org/abs/2306.17563).
 
 > Note: as you can tell from the years of the citations, reranking with LLMs is quite a recent topic; indeed, this is still a highly active area of research. Thus, beware that the "knowledge-cutoff" of this guide is Jan 2025.
@@ -35,6 +36,12 @@ For example, if the probabilities of ranking documents 1, 2, 3 as the top docume
 For more information about FIRST, refer to [Reddy et al. (2024)](https://arxiv.org/abs/2406.15657) if you are interested.
 
 ## Reranking with FirstMistral
+
+The target of this reproduction is from Table 3 of [this paper](https://arxiv.org/pdf/2411.05508), which reports SPLADE++ EnsembleDistil → FirstMistral results for TREC DL19 and DL20.
+
+**Note:** 
+RankLLM and its dependencies have changed since the experiments demonstrated in the paper, so reproducing the same multi-stage retrieval pipeline may result in different values from what was originally reported in Table 3. 
+In particular, the current DL19 result is higher than the 0.7678 reported in Table 3.
 
 [FirstMistral](https://arxiv.org/abs/2411.05508) is an LLM fine-tuned for listwise reranking using the FIRST approach.
 Similar to RankZephyr, we will run an end-to-end multi-stage retrieval with FirstMistral.
@@ -70,6 +77,8 @@ Results:
 ndcg_cut_10             all     0.7880
 ```
 
+As noted above, this result is expected to be higher than the 0.7678 reported in Table 3.
+
 The command above performs first-stage retrieval with SPLADE to get the initial 100 candidates, followed by listwise reranking using FIRST with FirstMistral.
 
 If you wish to compare FIRST's speed with traditional listwise reranking, omit the `--use-logits` and `--use-alpha` flags to perform traditional listwise reranking.
@@ -101,7 +110,7 @@ Results:
 ndcg_cut_10             all     0.7851
 ```
 
-Running the same pipeline on DL20 gives a nDCG@10 score in a similar range, and now we have completed the FirstMistral experiments on both datasets.
+Running the same pipeline on DL20 gives an nDCG@10 score quite close to the results reported in the paper.
 
 ---
 

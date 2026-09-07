@@ -20,6 +20,7 @@ Before starting, work through [install-colab-cli.md](install-colab-cli.md), whic
 - Be able to run end-to-end multi-stage retrieval pipelines with RankZephyr and FirstMistral.
 
 In this guide, we will focus on the listwise approach.
+Throughout the process, you will reproduce the SPLADE++ ED → RankZephyr results from Table 1, row (7) of [this paper](https://arxiv.org/pdf/2312.02724), on both TREC DL19 and DL20.
 For more information about pointwise and pairwise, one can refer to [Zhuang et al. (2024)](https://arxiv.org/abs/2310.14122) and [Qin et al. (2024)](https://arxiv.org/abs/2306.17563).
 
 > Note: as you can tell from the years of the citations, reranking with LLMs is quite a recent topic; indeed, this is still a highly active area of research. Thus, beware that the "knowledge-cutoff" of this guide is Jan 2025.
@@ -89,8 +90,10 @@ In practice, we often use a window size of 20 and a stride of 10.
 
 ## Reranking with RankZephyr
 
+The target of this reproduction is from Table 1, row (7) of [this paper](https://arxiv.org/pdf/2312.02724), which reports SPLADE++ ED → RankZephyr results for TREC DL19 and DL20.
+
 [RankZephyr](https://huggingface.co/castorini/rank_zephyr_7b_v1_full) is an LLM specifically fine-tuned for listwise reranking, led by [Pradeep et. al (2023)](https://arxiv.org/abs/2312.02724) at the University of Waterloo.
-We will run end-to-end multi-stage retrieval pipeline with RankZephyr on both TREC DL19 and DL20 datasets, realizing the listwise reranking with sliding window mechanism as described above.
+We will run end-to-end multi-stage retrieval pipelines with RankZephyr on both TREC DL19 and DL20 datasets, realizing the listwise reranking with sliding window mechanism as described above.
 Note that this will require a GPU with **at least 16GB of VRAM**.
 
 If you are short of GPUs, we recommend purchasing a [Google Colab Pro](https://colab.research.google.com/) for $13.99 CAD.
@@ -176,7 +179,7 @@ Results:
 ndcg_cut_10             all     0.7798
 ```
 
-Note that the result you get may vary slightly from the number above.
+This result should align very closely with the nDCG@10 reported for DL19 in Table 1, row (7), although it may vary slightly between runs.
 
 _Where is the first-stage retrieval?_
 It is hidden in the `--retrieval-method=SPLADE++_EnsembleDistil_ONNX` flag.
@@ -204,7 +207,7 @@ Results:
 ndcg_cut_10             all     0.8201
 ```
 
-Your result should again be close to the number above, although it may vary slightly between runs.
+This result should similarly closely reproduce the nDCG@10 reported for DL20 in Table 1, row(7), although it may vary slightly between runs.
 
 ---
 
