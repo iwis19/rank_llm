@@ -48,8 +48,8 @@ def main() -> None:
     )
     parser.add_argument(
         "--model",
-        default="minimax/minimax-m2:free",
-        help="OpenRouter model id (default: minimax/minimax-m2:free).",
+        default="minimax/minimax-m2",
+        help="OpenRouter model id (default: minimax/minimax-m2).",
     )
     parser.add_argument(
         "--k",
